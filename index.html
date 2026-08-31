@@ -1,0 +1,1049 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F6F0E1">
+<style>
+  html { color-scheme: light; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>Zeven Zegels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,400;0,600;0,700;1,500&family=Nunito:ital,wght@0,400;0,600;0,800;1,400&family=Space+Mono:wght@400;700&display=swap">
+
+<style>
+:root {
+  --paper:   #FFFCF3;
+  --paper-2: #F6F0E1;
+  --ink:     #2C2A26;
+  --ink-2:   #7A7466;
+  --teal:    #0E9B93;
+  --teal-lt: #C9E9E5;
+  --coral:   #FF6A57;
+  --coral-lt:#FFDDD6;
+  --sun:     #FFC93C;
+  --moss:    #9DC08B;
+  --moss-lt: #D8E7CD;
+  --water:   #9AD1DA;
+  --stone:   #CFC7B4;
+
+  --hand: "Shantell Sans", "Comic Sans MS", cursive;
+  --body: "Nunito", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "Space Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--paper-2); }
+
+body {
+  margin: 0;
+  background: var(--paper-2);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 2.5rem) clamp(0.75rem, 3vw, 2rem) 4rem;
+}
+
+/* ---------------- header ---------------- */
+
+header { text-align: center; margin-bottom: 1.1rem; }
+
+h1 {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(2.3rem, 9vw, 3.6rem);
+  line-height: 1;
+  margin: 0;
+  color: var(--ink);
+  transform: rotate(-1.4deg);
+}
+
+h1 span { color: var(--coral); display: inline-block; transform: rotate(2deg); }
+
+.sub {
+  font-family: var(--hand);
+  font-size: clamp(0.95rem, 2.6vw, 1.15rem);
+  color: var(--ink-2);
+  margin: 0.45rem 0 0;
+}
+
+.tally {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+  padding: 0.35rem 0.9rem;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  transform: rotate(0.8deg);
+}
+
+.dots { display: flex; gap: 4px; }
+
+.dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--paper-2);
+  border: 1.5px solid var(--ink);
+  transition: background 220ms ease;
+}
+
+.dot.on { background: var(--coral); }
+
+/* ---------------- map ---------------- */
+
+.scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.4rem;
+}
+
+.stage {
+  position: relative;
+  min-width: 620px;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.stage svg { display: block; width: 100%; height: auto; }
+
+.hint {
+  text-align: center;
+  font-family: var(--hand);
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  margin: 0.8rem 0 0;
+}
+
+/* pins */
+
+.pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  background: var(--stone);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 2px 3px 0 var(--ink);
+  transition: transform 160ms ease, background 220ms ease;
+}
+
+.pin:hover { transform: translate(-50%, -50%) scale(1.12) rotate(-4deg); }
+.pin:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+.pin.done { background: var(--coral); color: var(--paper); }
+
+.pin .lock { font-size: 1.05rem; line-height: 1; }
+
+.pin-label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 5px);
+  transform: translateX(-50%);
+  font-family: var(--hand);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 0 4px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+/* ---------------- note dialog ---------------- */
+
+dialog.note {
+  width: min(34rem, 92vw);
+  border: 3px solid var(--ink);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0;
+  box-shadow: 7px 7px 0 var(--ink);
+}
+
+dialog.note::backdrop { background: rgba(44, 42, 38, 0.55); }
+
+.note-inner { padding: clamp(1.1rem, 4vw, 1.8rem); }
+
+.tape {
+  height: 20px;
+  background: repeating-linear-gradient(45deg, var(--sun) 0 9px, #FFDC7A 9px 18px);
+  border-bottom: 3px solid var(--ink);
+}
+
+.note h2 {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  line-height: 1.05;
+  margin: 0.2rem 0 0;
+  text-wrap: balance;
+}
+
+.stamp {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  border: 2px solid var(--teal);
+  border-radius: 3px;
+  padding: 0.1rem 0.45rem;
+  transform: rotate(-2deg);
+}
+
+.note p { margin: 0.85rem 0 0; }
+.note p:first-of-type { margin-top: 0.9rem; }
+
+.note strong { font-weight: 800; }
+
+.note ul { margin: 0.85rem 0 0; padding-left: 1.15rem; }
+.note li { margin-top: 0.35rem; }
+.note li::marker { color: var(--coral); }
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.facts div {
+  background: var(--teal-lt);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.facts span { color: var(--ink-2); font-weight: 400; }
+
+.aside {
+  margin: 1rem 0 0;
+  background: var(--coral-lt);
+  border: 2px dashed var(--coral);
+  border-radius: 4px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.93rem;
+}
+
+.aside b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 0.2rem;
+}
+
+.kiss {
+  font-family: var(--hand);
+  font-size: 1.2rem;
+  color: var(--coral);
+  margin-top: 1rem;
+  transform: rotate(-1deg);
+}
+
+/* keypad */
+
+.keypad { display: flex; gap: 0.5rem; margin-top: 1.1rem; flex-wrap: wrap; }
+
+.keypad input {
+  flex: 1 1 9rem;
+  min-width: 0;
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0.6rem 0.7rem;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+}
+
+.keypad input::placeholder { color: var(--ink-2); font-weight: 400; letter-spacing: 0.14em; }
+.keypad input:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+.keypad button {
+  font-family: var(--hand);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.55rem 1.2rem;
+  color: var(--paper);
+  background: var(--coral);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.keypad button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.keypad button:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+.deny {
+  font-family: var(--hand);
+  color: var(--coral);
+  font-size: 0.95rem;
+  margin: 0.6rem 0 0;
+}
+
+.close {
+  margin-top: 1.3rem;
+  font-family: var(--hand);
+  font-size: 0.92rem;
+  background: none;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.close:hover { background: var(--paper-2); }
+.close:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+.shake { animation: shake 380ms ease; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.pop { animation: pop 420ms cubic-bezier(0.2,0.8,0.3,1.2); }
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.96) rotate(-1deg); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shake, .pop { animation: none; }
+  .pin { transition: none; }
+}
+
+/* ---------------- the gate ---------------- */
+
+.stage.locked .pin { pointer-events: none; }
+
+.gate {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(246, 240, 225, 0.965);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+}
+
+.gate .seal-blob {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  background: var(--coral);
+  border: 3px solid var(--ink);
+  box-shadow: 3px 4px 0 var(--ink);
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  transform: rotate(-7deg);
+}
+
+.gate h2 {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 4.5vw, 2rem);
+  margin: 0;
+  line-height: 1.1;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.gate .why {
+  font-family: var(--hand);
+  color: var(--ink-2);
+  margin: 0;
+  font-size: 1rem;
+  max-width: 34ch;
+}
+
+.clock {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.clock div {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 5px;
+  box-shadow: 2px 3px 0 var(--ink);
+  padding: 0.35rem 0.6rem;
+  min-width: 62px;
+}
+
+.clock b {
+  display: block;
+  font-family: var(--mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.clock span {
+  font-family: var(--hand);
+  font-size: 0.7rem;
+  color: var(--ink-2);
+}
+
+.gate form {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gate input {
+  width: 8.5rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0.4rem 0.5rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--stone);
+  border-radius: 4px;
+}
+
+.gate input:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+.gate form button {
+  font-family: var(--hand);
+  font-size: 0.85rem;
+  padding: 0.35rem 0.8rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gate form button:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+.gate .tiny {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* ---------------- footer ---------------- */
+
+footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-family: var(--hand);
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.reset {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: none;
+  border: 1px solid var(--stone);
+  border-radius: 3px;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.reset:hover { color: var(--ink); border-color: var(--ink); }
+.reset:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+</style>
+
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <h1>Zeven <span>Zegels</span></h1>
+    <p class="sub">Voor Lisa, 31 &middot; een kaart met zeven plekken op slot</p>
+    <div class="tally">
+      <span class="dots" id="dots"></span>
+      <span id="count">0/7 open</span>
+    </div>
+  </header>
+
+  <div class="scroller">
+    <div class="stage" id="stage">
+
+      <svg viewBox="0 0 1000 620" role="img" aria-label="Getekende kaart van het weekend in de Vulkaneifel, met zeven genummerde plekken.">
+        <defs>
+          <pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#9DC08B" stroke-width="2" opacity="0.45"/>
+          </pattern>
+          <pattern id="ripple" width="14" height="8" patternUnits="userSpaceOnUse">
+            <path d="M0 5 q3.5 -4 7 0 t7 0" fill="none" stroke="#FFFCF3" stroke-width="1.4" opacity="0.8"/>
+          </pattern>
+        </defs>
+
+        <rect width="1000" height="620" fill="#FFFCF3"/>
+
+        <!-- soft ground shapes -->
+        <path d="M-20 470 q120 -55 250 -18 t230 -22 q140 -34 260 6 t300 -26 v230 h-1040z" fill="#D8E7CD" opacity="0.75"/>
+        <path d="M-20 250 q160 -40 300 10 t260 -34 q150 -32 250 18 t230 -20 v-244 h-1040z" fill="#F6F0E1" opacity="0.9"/>
+
+        <!-- hills -->
+        <g stroke="#2C2A26" stroke-width="2.4" fill="#9DC08B" stroke-linejoin="round">
+          <path d="M60 330 q52 -74 108 0 z"/>
+          <path d="M140 344 q64 -92 132 0 z"/>
+          <path d="M690 250 q58 -84 118 0 z" fill="#CFC7B4"/>
+        </g>
+        <path d="M690 250 q58 -84 118 0" fill="url(#hatch)" stroke="none" opacity="0.5"/>
+
+        <!-- forest -->
+        <g stroke="#2C2A26" stroke-width="2.2" stroke-linejoin="round" fill="#9DC08B">
+          <path d="M170 430 l16 -34 16 34 z"/><rect x="184" y="430" width="4" height="9" fill="#2C2A26" stroke="none"/>
+          <path d="M206 442 l18 -38 18 38 z"/><rect x="222" y="442" width="4" height="10" fill="#2C2A26" stroke="none"/>
+          <path d="M248 428 l15 -32 15 32 z"/><rect x="261" y="428" width="4" height="9" fill="#2C2A26" stroke="none"/>
+          <path d="M286 444 l17 -36 17 36 z"/><rect x="301" y="444" width="4" height="10" fill="#2C2A26" stroke="none"/>
+          <path d="M198 468 l15 -32 15 32 z"/><rect x="211" y="468" width="4" height="9" fill="#2C2A26" stroke="none"/>
+          <path d="M258 472 l16 -34 16 34 z"/><rect x="272" y="472" width="4" height="9" fill="#2C2A26" stroke="none"/>
+        </g>
+
+        <!-- tent -->
+        <g stroke="#2C2A26" stroke-width="2.6" stroke-linejoin="round">
+          <path d="M212 398 l24 -34 24 34 z" fill="#FF6A57"/>
+          <path d="M236 364 l0 34" stroke-width="2"/>
+          <path d="M228 398 l8 -16 8 16" fill="#2C2A26" stroke="none"/>
+        </g>
+        <!-- little apple tree next to tent -->
+        <g stroke="#2C2A26" stroke-width="2.2">
+          <line x1="288" y1="400" x2="288" y2="378" stroke-linecap="round"/>
+          <circle cx="288" cy="368" r="14" fill="#9DC08B"/>
+          <circle cx="283" cy="365" r="2.6" fill="#FF6A57" stroke="none"/>
+          <circle cx="293" cy="371" r="2.6" fill="#FF6A57" stroke="none"/>
+        </g>
+
+        <!-- river Lieser -->
+        <path d="M330 560 q60 -70 40 -130 t50 -120 q40 -54 120 -60" fill="none" stroke="#9AD1DA" stroke-width="13" stroke-linecap="round"/>
+        <path d="M330 560 q60 -70 40 -130 t50 -120 q40 -54 120 -60" fill="none" stroke="#2C2A26" stroke-width="1.4" stroke-dasharray="1 9" stroke-linecap="round" opacity="0.55"/>
+        <text x="352" y="512" font-family="Shantell Sans, cursive" font-size="15" fill="#2C2A26" opacity="0.7" transform="rotate(-64 352 512)">de Lieser</text>
+
+        <!-- castle -->
+        <g stroke="#2C2A26" stroke-width="2.6" stroke-linejoin="round">
+          <path d="M392 500 q40 -26 82 0 z" fill="#CFC7B4"/>
+          <rect x="404" y="452" width="22" height="48" fill="#F6F0E1"/>
+          <path d="M404 452 v-9 h5 v5 h6 v-5 h5 v5 h6 v-5 h5 v9 z" fill="#F6F0E1"/>
+          <rect x="440" y="464" width="18" height="36" fill="#F6F0E1"/>
+          <path d="M440 464 v-8 h4 v4 h5 v-4 h4 v4 h5 v-4 h4 v8 z" fill="#F6F0E1"/>
+          <rect x="411" y="470" width="7" height="11" rx="3.5" fill="#2C2A26" stroke="none"/>
+        </g>
+        <!-- flag -->
+        <g stroke="#2C2A26" stroke-width="2">
+          <line x1="415" y1="443" x2="415" y2="424" stroke-linecap="round"/>
+          <path d="M415 424 l16 5 -16 6 z" fill="#FF6A57"/>
+        </g>
+
+        <!-- church Eckfeld -->
+        <g stroke="#2C2A26" stroke-width="2.5" stroke-linejoin="round">
+          <rect x="486" y="196" width="46" height="34" fill="#F6F0E1"/>
+          <path d="M480 196 l29 -20 29 20 z" fill="#CFC7B4"/>
+          <rect x="540" y="180" width="18" height="50" fill="#F6F0E1"/>
+          <path d="M537 180 l12 -20 12 20 z" fill="#FF6A57"/>
+          <line x1="549" y1="160" x2="549" y2="152" stroke-linecap="round"/>
+          <line x1="545" y1="156" x2="553" y2="156" stroke-linecap="round"/>
+        </g>
+
+        <!-- little fossil horse -->
+        <g stroke="#2C2A26" stroke-width="2" stroke-linejoin="round" fill="#FFC93C">
+          <path d="M470 262 q6 -14 22 -12 q14 2 16 12 l4 16 h-6 l-3 -11 h-8 l-3 11 h-6 l-2 -9 q-8 1 -12 -3 z"/>
+          <circle cx="474" cy="255" r="1.6" fill="#2C2A26" stroke="none"/>
+        </g>
+        <text x="440" y="292" font-family="Shantell Sans, cursive" font-size="13" fill="#7A7466">45 miljoen jaar oud</text>
+
+        <!-- house on hill -->
+        <g stroke="#2C2A26" stroke-width="2.6" stroke-linejoin="round">
+          <path d="M648 372 q56 -32 116 0 z" fill="#D8E7CD"/>
+          <rect x="678" y="330" width="52" height="42" fill="#FFFCF3"/>
+          <path d="M670 330 l34 -24 34 24 z" fill="#FF6A57"/>
+          <rect x="692" y="348" width="14" height="24" fill="#C9E9E5"/>
+          <rect x="713" y="346" width="11" height="11" fill="#C9E9E5"/>
+        </g>
+        <!-- deck chair + sun -->
+        <g stroke="#2C2A26" stroke-width="2" stroke-linecap="round">
+          <path d="M744 366 l10 -14" /><path d="M744 366 l14 0" /><path d="M752 356 l9 4" stroke="#FF6A57" stroke-width="3"/>
+        </g>
+        <g stroke="#2C2A26" stroke-width="2.2">
+          <circle cx="806" cy="300" r="14" fill="#FFC93C"/>
+          <g stroke-linecap="round">
+            <line x1="806" y1="278" x2="806" y2="272"/><line x1="806" y1="328" x2="806" y2="322"/>
+            <line x1="784" y1="300" x2="778" y2="300"/><line x1="834" y1="300" x2="828" y2="300"/>
+            <line x1="790" y1="284" x2="786" y2="280"/><line x1="822" y1="316" x2="826" y2="320"/>
+          </g>
+        </g>
+
+        <!-- pasta bowl -->
+        <g stroke="#2C2A26" stroke-width="2.6" stroke-linejoin="round">
+          <path d="M584 548 q36 30 72 0 z" fill="#FFFCF3"/>
+          <path d="M580 548 h80" stroke-linecap="round"/>
+          <path d="M596 545 q8 -14 20 -4 q10 8 22 -2" fill="none" stroke="#FFC93C" stroke-width="3.4" stroke-linecap="round"/>
+          <circle cx="612" cy="540" r="3.6" fill="#FF6A57" stroke="none"/>
+          <circle cx="634" cy="543" r="3.2" fill="#FF6A57" stroke="none"/>
+        </g>
+
+        <!-- three maars + tower -->
+        <g stroke="#2C2A26" stroke-width="2.6">
+          <ellipse cx="836" cy="122" rx="40" ry="26" fill="#9AD1DA"/>
+          <ellipse cx="904" cy="166" rx="30" ry="20" fill="#9AD1DA"/>
+          <ellipse cx="784" cy="182" rx="26" ry="17" fill="#9AD1DA"/>
+        </g>
+        <ellipse cx="836" cy="122" rx="40" ry="26" fill="url(#ripple)" stroke="none"/>
+        <ellipse cx="904" cy="166" rx="30" ry="20" fill="url(#ripple)" stroke="none"/>
+        <g stroke="#2C2A26" stroke-width="2.5" stroke-linejoin="round">
+          <path d="M856 214 l6 -44 h14 l6 44 z" fill="#F6F0E1"/>
+          <rect x="853" y="164" width="32" height="9" fill="#CFC7B4"/>
+          <path d="M853 164 l16 -13 16 13 z" fill="#FF6A57"/>
+        </g>
+        <text x="892" y="212" font-family="Shantell Sans, cursive" font-size="13" fill="#7A7466">43 treden</text>
+
+        <!-- car -->
+        <g stroke="#2C2A26" stroke-width="2.5" stroke-linejoin="round">
+          <path d="M60 566 q4 -16 18 -16 h30 l14 12 h16 q8 0 8 8 v8 h-86 z" fill="#0E9B93"/>
+          <circle cx="82" cy="580" r="8" fill="#FFFCF3"/>
+          <circle cx="132" cy="580" r="8" fill="#FFFCF3"/>
+        </g>
+
+        <!-- boar -->
+        <g stroke="#2C2A26" stroke-width="2.2" stroke-linejoin="round">
+          <path d="M300 300 q-4 -14 12 -16 q10 -1 16 5 l14 -2 -4 8 q6 8 -2 15 l2 8 h-6 l-3 -6 h-14 l-3 6 h-6 l1 -8 q-8 -3 -7 -10 z" fill="#CFC7B4"/>
+          <circle cx="336" cy="292" r="1.7" fill="#2C2A26" stroke="none"/>
+        </g>
+        <text x="266" y="330" font-family="Shantell Sans, cursive" font-size="13" fill="#7A7466">everzwijn (misschien)</text>
+
+        <!-- sheep -->
+        <g stroke="#2C2A26" stroke-width="2.2" stroke-linejoin="round">
+          <ellipse cx="560" cy="430" rx="19" ry="14" fill="#FFFCF3"/>
+          <circle cx="577" cy="423" r="7" fill="#2C2A26"/>
+          <line x1="551" y1="443" x2="551" y2="450" stroke-linecap="round"/>
+          <line x1="568" y1="443" x2="568" y2="450" stroke-linecap="round"/>
+        </g>
+
+        <!-- clouds -->
+        <g stroke="#2C2A26" stroke-width="2.2" fill="#FFFCF3" stroke-linejoin="round">
+          <path d="M120 120 q6 -20 26 -16 q8 -18 28 -8 q22 -6 24 16 q16 4 8 18 h-92 q-8 -12 6 -10 z"/>
+          <path d="M600 92 q5 -16 21 -13 q7 -14 23 -6 q18 -5 19 13 q13 3 7 14 h-75 q-6 -10 5 -8 z"/>
+        </g>
+
+        <!-- compass -->
+        <g transform="translate(930 540)" stroke="#2C2A26" stroke-width="2.4">
+          <circle r="30" fill="#FFFCF3"/>
+          <path d="M0 -22 L7 0 L0 22 L-7 0 Z" fill="#FF6A57" stroke-linejoin="round"/>
+          <text y="-34" text-anchor="middle" font-family="Shantell Sans, cursive" font-size="14" fill="#2C2A26" stroke="none">N-ish</text>
+        </g>
+
+        <!-- notes -->
+        <text x="430" y="586" font-family="Shantell Sans, cursive" font-size="15" fill="#7A7466">hier is niks. echt niks.</text>
+        <text x="150" y="200" font-family="Shantell Sans, cursive" font-size="15" fill="#7A7466">2 liter water elk &rarr;</text>
+        <text x="606" y="286" font-family="Shantell Sans, cursive" font-size="15" fill="#7A7466">omhoog. sorry.</text>
+
+        <!-- routes: drive (teal dash-dot) -->
+        <g fill="none" stroke="#0E9B93" stroke-width="3" stroke-linecap="round" stroke-dasharray="12 9" opacity="0.85">
+          <path d="M120 528 q60 -46 118 -62"/>
+          <path d="M262 420 q86 34 158 44"/>
+          <path d="M470 452 q108 -46 214 -104"/>
+          <path d="M690 358 q-30 116 -66 152"/>
+          <path d="M660 512 q136 -152 190 -288"/>
+        </g>
+
+        <!-- the walking loop (coral, fat dots) -->
+        <path d="M436 470 q-70 -60 -30 -140 q34 -68 116 -108 q76 -36 108 20 q34 52 -34 94 q-72 44 -66 106 q4 44 -58 28"
+              fill="none" stroke="#FF6A57" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 12"/>
+        <text x="336" y="404" font-family="Shantell Sans, cursive" font-size="15" fill="#FF6A57" transform="rotate(-58 336 404)">20 km</text>
+      </svg>
+
+      <!-- pins get injected here -->
+
+      <div class="gate" id="gate" hidden>
+        <div class="seal-blob">&#127873;</div>
+        <h2>Lisa, deze kaart gaat pas op vrijdag open.</h2>
+        <p class="why">Eenendertig is een mooie leeftijd om iets niet te weten.</p>
+        <div class="clock" id="clock"></div>
+        <form id="adminForm">
+          <input type="text" autocomplete="off" autocapitalize="characters" spellcheck="false"
+                 placeholder="code" aria-label="Code om vroeger te openen">
+          <button type="submit">hm</button>
+        </form>
+        <p class="tiny" id="adminMsg">vrijdag 11 september &middot; 00:00</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="hint">Tik op een cijfer. De meeste zitten nog op slot.</p>
+
+  <dialog class="note" id="note">
+    <div class="tape"></div>
+    <div class="note-inner" id="noteInner"></div>
+  </dialog>
+
+  <footer>
+    <p>Zeven zegels &middot; Vulkaneifel &middot; 2026</p>
+    <button class="reset" id="reset" type="button">alles opnieuw sluiten</button>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var KEY = "zevenzegels.open.v2";
+
+  var SEALS = [
+    {
+      n: "1", hash: 2087696602, x: 9.5, y: 84, label: "de auto",
+      when: "Vrijdag &middot; onderweg",
+      title: "Waar we heen gaan",
+      teaser: "Je zit in de auto en je weet nog van niks.",
+      body:
+        '<p>We rijden naar de <strong>Vulkaneifel</strong>. Een landschap dat gemaakt is door ontploffingen: ' +
+        'ronde kratermeren, vulkaankegels, en dalen die zich door de leisteen hebben gesneden.</p>' +
+        '<div class="facts"><div>2u30 <span>rijden</span></div><div>2 <span>nachten</span></div><div>±30 km <span>te voet</span></div></div>' +
+        '<p>Eén nacht slapen we buiten. Eén nacht op een heuvel met uitzicht. Daartussen ligt de langste ' +
+        'wandeling die we dit jaar gedaan hebben.</p>' +
+        '<p class="kiss">Gelukkige verjaardag.</p>'
+    },
+    {
+      n: "2", hash: 698651316, x: 24, y: 64.5, label: "de tent",
+      when: "Vrijdag &middot; avond",
+      title: "De nacht onder de fruitbomen",
+      teaser: "Er staat geen bordje. Er staat helemaal niks.",
+      body:
+        '<p>Dit is een <strong>Trekkingplatz</strong>: één geboekte plek in het bos, en verder niets. Hij heet ' +
+        '<em>Unter den Obstbäumen</em> en ligt in het Kondelwald. De coördinaten krijg je pas na het boeken, ' +
+        'want de plek staat op geen enkele kaart.</p>' +
+        '<div class="facts"><div>€15 <span>de nacht</span></div><div>0 <span>buren</span></div><div>1 <span>kraan</span></div></div>' +
+        '<p>Een weide met oude fruitbomen langs een molenbeek, aan de rand van het bos. Er is een washok met ' +
+        'een toilet en stromend water. Dat is de hele infrastructuur.</p>' +
+        '<div class="aside"><b>Klein detail</b>Morgen om half acht opbreken. De wandeling duurt zes uur en ' +
+        'we willen echt niet in het donker terugkomen.</div>'
+    },
+    {
+      n: "3", hash: 1420162369, x: 43, y: 76, label: "de start",
+      when: "Zaterdag &middot; 08:30",
+      title: "De lus",
+      teaser: "Vanaf hier zijn er geen afkortingen meer.",
+      body:
+        '<p>Twee lussen achter elkaar, allebei vanaf het <strong>Kurhaus</strong>. Eerst de grote: door het ' +
+        'Falbach-bos, over de plateaus, en terug door het <strong>Lieserdal</strong>. Daarna een korte ' +
+        'als toetje, langs de twee burchten.</p>' +
+        '<div class="facts"><div>20 km <span>samen</span></div><div>580 m <span>omhoog</span></div><div>±6u <span>duur</span></div></div>' +
+        '<ul><li>De Pellenkanzel en de Philosophenecke, twee uitkijkpunten op 400 meter</li>' +
+        '<li>Het Belvedere, met zicht op allebei de kasteelruïnes tegelijk</li>' +
+        '<li>Tussendoor komen we langs de auto, dus de tweede helft kan met lichte rugzak</li></ul>' +
+        '<div class="aside"><b>Onderweg is er niks</b>Geen kraan, geen café, geen winkel. Twee liter water elk, ' +
+        'en de lunch gaat mee in de rugzak.</div>'
+    },
+    {
+      n: "4", hash: 2160252423, x: 52, y: 32.5, label: "halfweg",
+      when: "Zaterdag &middot; halfweg",
+      title: "Wat hier gevonden is",
+      teaser: "Tien kilometer gehad. Tien te gaan.",
+      body:
+        '<p>Ergens onder deze weides ligt een uitgedoofde krater die volliep met water en daarna dichtslibde. ' +
+        'In die modder is iets bewaard gebleven.</p>' +
+        '<p>Een <strong>zwanger oerpaardje</strong> van vijfenveertig miljoen jaar oud. Compleet, met het veulen ' +
+        'nog in de buik. Het ligt nu in het museum in het dorp, samen met de oudste honingbij ter wereld. ' +
+        'Allebei uit dezelfde laag, hier vlakbij opgegraven.</p>' +
+        '<div class="aside"><b>Goed nieuws</b>Het zwaarste stuk is gehad. De weg terug loopt door het dal van ' +
+        'de Lieser, en daarna komen we langs de auto voor we aan het laatste stuk beginnen.</div>'
+    },
+    {
+      n: "5", hash: 211206149, x: 70, y: 53, label: "het huis",
+      when: "Zaterdag &middot; 16:00",
+      title: "Weitblick",
+      teaser: "Schoenen uit. Dit is de rest van de dag.",
+      body:
+        '<p>Geen tent vanavond. Een eigen appartement op een helling boven het dorp, met een terras dat uitkijkt ' +
+        'over het dal richting de <strong>Mosenberg</strong>, de vulkaankegel aan de overkant. Van buitenaf kan ' +
+        'niemand dat terras inkijken.</p>' +
+        '<div class="facts"><div>eigen <span>ingang</span></div><div>eigen <span>keuken</span></div><div>eigen <span>terras</span></div></div>' +
+        '<p>Wandelpaden beginnen letterlijk rond het huis. En er staan tuinstoelen, precies op het moment dat ' +
+        'de zon laag komt te staan.</p>' +
+        '<p class="kiss">Ga zitten. Je hebt het verdiend.</p>'
+    },
+    {
+      n: "6", hash: 204049865, x: 62, y: 84, label: "eten",
+      when: "Zaterdag &middot; 19:00",
+      title: "Aan tafel",
+      teaser: "Tweeëntwintig kilometer verdient koolhydraten.",
+      body:
+        '<p>Beneden in het dorp staat <strong>Trattoria Vulcano</strong>. Geen sterren, geen tasting menu, geen ' +
+        'amuse die je met een pincet moet eten. Gewoon een Italiaan in een Eifeldorp van dertienhonderd ' +
+        'inwoners, met pasta en een fles rood.</p>' +
+        '<div class="facts"><div>1,3 km <span>bergaf</span></div><div>21:30 <span>keuken dicht</span></div></div>' +
+        '<p>Zelfde straat als waar we vanochtend vertrokken zijn. Dezelfde stoep, elf uur en twintig ' +
+        'kilometer later.</p>' +
+        '<p class="kiss">Op jou.</p>'
+    },
+    {
+      n: "7", hash: 1132313756, x: 86, y: 26, label: "de meren",
+      when: "Zondag",
+      title: "Het laatste zegel",
+      teaser: "Eén keuze, en die is aan jou.",
+      body:
+        '<p>Uitchecken moet tussen tien en half elf. Daarna ligt er nog één dag, en jij kiest wat we ermee doen. ' +
+        'Twee opties, allebei goed, en niet allebei.</p>' +
+        '<ul>' +
+        '<li><strong>De meren.</strong> Achtenhalve kilometer rond drie kratermeren, met bovenop een ' +
+        'uitkijktoren van elf meter en drieënveertig treden. Gratis, altijd open, en je ziet alle drie de ' +
+        'meren tegelijk.</li>' +
+        '<li><strong>De thermen.</strong> Warm water en helemaal niks doen, na dertig kilometer op je benen. ' +
+        'Wel een echte omweg.</li>' +
+        '</ul>' +
+        '<div class="aside"><b>En dan</b>Tweeënhalf uur terug naar huis. Dat was het weekend.</div>' +
+        '<p class="kiss">Dank je dat je meeging.</p>'
+    }
+  ];
+
+  var stage = document.getElementById("stage");
+  var dots = document.getElementById("dots");
+  var count = document.getElementById("count");
+  var note = document.getElementById("note");
+  var inner = document.getElementById("noteInner");
+
+  function hash(s) {
+    var x = 5381;
+    s = String(s).toLowerCase().trim();
+    for (var i = 0; i < s.length; i++) { x = ((x * 33) ^ s.charCodeAt(i)) >>> 0; }
+    return x;
+  }
+
+  function load() {
+    try { var r = localStorage.getItem(KEY); return r ? JSON.parse(r) : []; }
+    catch (e) { return []; }
+  }
+  function save(v) {
+    try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {}
+  }
+
+  var open = load();
+
+  SEALS.forEach(function (s, i) {
+    var b = document.createElement("button");
+    b.className = "pin";
+    b.type = "button";
+    b.style.left = s.x + "%";
+    b.style.top = s.y + "%";
+    b.setAttribute("aria-label", "Plek " + s.n + ", " + s.label);
+    b.innerHTML = '<span class="glyph"></span><span class="pin-label">' + s.label + "</span>";
+    b.addEventListener("click", function () { show(i); });
+    stage.appendChild(b);
+    s.el = b;
+
+    var d = document.createElement("span");
+    d.className = "dot";
+    dots.appendChild(d);
+    s.dot = d;
+  });
+
+  function paint() {
+    var n = 0;
+    SEALS.forEach(function (s, i) {
+      var done = open.indexOf(i) !== -1;
+      if (done) n++;
+      s.el.classList.toggle("done", done);
+      s.dot.classList.toggle("on", done);
+      s.el.querySelector(".glyph").innerHTML = done
+        ? s.n
+        : '<span class="lock">&#128274;</span>';
+    });
+    count.textContent = n + "/7 open";
+  }
+
+  function show(i) {
+    var s = SEALS[i];
+    var done = open.indexOf(i) !== -1;
+
+    if (done) {
+      inner.innerHTML =
+        '<span class="stamp">' + s.when + "</span>" +
+        "<h2>" + s.title + "</h2>" +
+        s.body +
+        '<button class="close" type="button">terug naar de kaart</button>';
+    } else {
+      inner.innerHTML =
+        '<span class="stamp">' + s.when + "</span>" +
+        "<h2>" + s.title + "</h2>" +
+        "<p>" + s.teaser + "</p>" +
+        '<form class="keypad"><input type="text" autocomplete="off" autocapitalize="characters" ' +
+        'spellcheck="false" placeholder="code" aria-label="Code"><button type="submit">open</button></form>' +
+        '<button class="close" type="button">nog niet</button>';
+
+      inner.querySelector(".keypad").addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var input = inner.querySelector(".keypad input");
+        if (hash(input.value) === s.hash) {
+          open.push(i);
+          save(open);
+          paint();
+          show(i);
+          inner.classList.remove("pop");
+          void inner.offsetWidth;
+          inner.classList.add("pop");
+          return;
+        }
+        var deny = inner.querySelector(".deny");
+        if (!deny) {
+          deny = document.createElement("p");
+          deny.className = "deny";
+          deny.setAttribute("role", "status");
+          inner.querySelector(".keypad").after(deny);
+        }
+        deny.textContent = input.value.trim() ? "Nee. Nog niet." : "Er moet wel iets staan.";
+        var pad = inner.querySelector(".keypad");
+        pad.classList.remove("shake");
+        void pad.offsetWidth;
+        pad.classList.add("shake");
+        input.select();
+      });
+    }
+
+    inner.querySelector(".close").addEventListener("click", function () { note.close(); });
+    if (!note.open) note.showModal();
+  }
+
+  note.addEventListener("click", function (ev) {
+    if (ev.target === note) note.close();
+  });
+
+  /* ---------- the gate: sealed until Friday 11 September 2026 ---------- */
+
+  var GATE_KEY = "zevenzegels.gate.v1";
+  var ADMIN_HASH = 1838800238;
+  var OPENS_AT = new Date(2026, 8, 11, 0, 0, 0); // 11 Sep 2026, local time
+  var gate = document.getElementById("gate");
+  var clock = document.getElementById("clock");
+  var adminForm = document.getElementById("adminForm");
+  var adminMsg = document.getElementById("adminMsg");
+  var ticker = null;
+
+  function bypassed() {
+    try { return localStorage.getItem(GATE_KEY) === "1"; } catch (e) { return false; }
+  }
+
+  function unit(v, label) {
+    return '<div><b>' + String(v).padStart(2, "0") + "</b><span>" + label + "</span></div>";
+  }
+
+  function lift() {
+    gate.hidden = true;
+    stage.classList.remove("locked");
+    if (ticker) { clearInterval(ticker); ticker = null; }
+  }
+
+  function tick() {
+    var left = OPENS_AT - Date.now();
+    if (left <= 0) { lift(); return; }
+    var s = Math.floor(left / 1000);
+    var d = Math.floor(s / 86400);
+    var h = Math.floor((s % 86400) / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    clock.innerHTML =
+      unit(d, d === 1 ? "dag" : "dagen") +
+      unit(h, "uur") +
+      unit(m, "min") +
+      unit(s % 60, "sec");
+  }
+
+  adminForm.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var input = adminForm.querySelector("input");
+    if (hash(input.value) === ADMIN_HASH) {
+      try { localStorage.setItem(GATE_KEY, "1"); } catch (e) {}
+      lift();
+      return;
+    }
+    adminMsg.textContent = input.value.trim()
+      ? "nee. wachten."
+      : "vrijdag 11 september · 00:00";
+    adminForm.classList.remove("shake");
+    void adminForm.offsetWidth;
+    adminForm.classList.add("shake");
+    input.select();
+  });
+
+  if (Date.now() >= OPENS_AT || bypassed()) {
+    lift();
+  } else {
+    gate.hidden = false;
+    stage.classList.add("locked");
+    tick();
+    ticker = setInterval(tick, 1000);
+  }
+
+  document.getElementById("reset").addEventListener("click", function () {
+    open = [];
+    save(open);
+    try { localStorage.removeItem(GATE_KEY); } catch (e) {}
+    paint();
+    location.reload();
+  });
+
+  paint();
+})();
+</script>
+</body>
+</html>
