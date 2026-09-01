@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F6F0E1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🌋</text></svg>">
 <style>
   html { color-scheme: light; }
   body { margin: 0; }
@@ -139,7 +140,7 @@ h1 span { color: var(--coral); display: inline-block; transform: rotate(2deg); }
 
 .zoomctl {
   position: absolute;
-  right: 10px;
+  left: 10px;
   bottom: 10px;
   z-index: 4;
   display: flex;
@@ -811,7 +812,7 @@ footer {
           <path d="M470 262 q6 -14 22 -12 q14 2 16 12 l4 16 h-6 l-3 -11 h-8 l-3 11 h-6 l-2 -9 q-8 1 -12 -3 z"/>
           <circle cx="474" cy="255" r="1.6" fill="#2C2A26" stroke="none"/>
         </g>
-        <text x="440" y="292" font-family="Shantell Sans, cursive" font-size="13" fill="#7A7466">45 miljoen jaar oud</text>
+        <text x="426" y="306" font-family="Shantell Sans, cursive" font-size="13" fill="#7A7466">45 miljoen jaar oud</text>
 
         <!-- house on hill -->
         <g stroke="#2C2A26" stroke-width="2.6" stroke-linejoin="round">
@@ -856,7 +857,7 @@ footer {
           <rect x="853" y="164" width="32" height="9" fill="#CFC7B4"/>
           <path d="M853 164 l16 -13 16 13 z" fill="#FF6A57"/>
         </g>
-        <text x="892" y="212" font-family="Shantell Sans, cursive" font-size="13" fill="#7A7466">43 treden</text>
+        <text x="820" y="248" font-family="Shantell Sans, cursive" font-size="13" fill="#7A7466">43 treden</text>
 
         <!-- car -->
         <g stroke="#2C2A26" stroke-width="2.5" stroke-linejoin="round">
@@ -887,7 +888,7 @@ footer {
         </g>
 
         <!-- compass -->
-        <g transform="translate(930 540)" stroke="#2C2A26" stroke-width="2.4">
+        <g transform="translate(922 500)" stroke="#2C2A26" stroke-width="2.4">
           <circle r="30" fill="#FFFCF3"/>
           <path d="M0 -22 L7 0 L0 22 L-7 0 Z" fill="#FF6A57" stroke-linejoin="round"/>
           <text y="-34" text-anchor="middle" font-family="Shantell Sans, cursive" font-size="14" fill="#2C2A26" stroke="none">N-ish</text>
@@ -1108,9 +1109,13 @@ footer {
   function fit(cover) {
     var vw = viewport.clientWidth, vh = viewport.clientHeight;
     if (!vw || !vh) return;
-    kMin = Math.min(vw / W, vh / H);
+    var contain = Math.min(vw / W, vh / H);
+    var fill = Math.max(vw / W, vh / H);
+    // in a portrait frame, zooming out to "contain" leaves ugly empty bands and
+    // crowds the pins, so never let it go below the filling scale there
+    kMin = cover ? fill : contain;
     kMax = kMin * 5;
-    k = cover ? Math.max(vw / W, vh / H) : kMin;
+    k = cover ? fill : contain;
     tx = (vw - W * k) / 2;
     ty = (vh - H * k) / 2;
     clampPan();
@@ -1134,6 +1139,9 @@ footer {
   }
 
   viewport.addEventListener("pointerdown", function (ev) {
+    // never capture a press aimed at a pin or a zoom button: capture retargets the
+    // following click to the viewport and the button never fires
+    if (ev.target.closest(".pin, .zoomctl")) return;
     pointers.set(ev.pointerId, local(ev));
     viewport.setPointerCapture(ev.pointerId);
     moved = 0;
@@ -1200,7 +1208,9 @@ footer {
   document.getElementById("zout").addEventListener("click", function () {
     zoomTo(k / 1.4, viewport.clientWidth / 2, viewport.clientHeight / 2);
   });
-  document.getElementById("zfit").addEventListener("click", function () { fit(false); });
+  document.getElementById("zfit").addEventListener("click", function () {
+    fit(window.innerWidth <= 700);
+  });
 
   // only refit on a real width change, so the mobile URL bar hiding doesn't reset the view
   var rt = null, lastW = window.innerWidth;
