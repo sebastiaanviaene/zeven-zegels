@@ -40,7 +40,7 @@ nul-geïndexeerd is: `new Date(2026, 8, 11)` is 11 september 2026.
 
 | | |
 |---|---|
-| **Vrijdag 11/9** | Aarschot naar Bengel, ~2u30. Trekkingplatz "Unter den Obstbäumen" in het Kondelwald, €15. Coördinaten krijg je bij de bevestiging. |
+| **Vrijdag 11/9** | Aarschot naar Bengel, ~2u30. Trekkingplatz "Unter den Obstbäumen" bij de oude Öl- und Kornmühle Springiersbach, €15, inchecken vanaf 14:00. Wandelen: Rundweg Nr. 1 (Rot), 6,1 km, vanaf de kloosterparking op ~1,5 km van de tent. |
 | **Zaterdag 12/9** | 07:30 opbreken. 08:30 start aan het Kurhaus, Grafenstraße 23, Manderscheid. Grafschaft-Pfad plus Manderscheider Burgenstieg, samen ~20 km en ~580 hm. 16:00 inchecken op Kyllblick 12. 19:00 Trattoria Vulcano, Grafenstraße 18. |
 | **Zondag 13/9** | Uitchecken tussen 10:00 en 10:30. Dan de Dauner Maare (8,6 km) of de Vulkaneifel-Therme in Bad Bertrich (€16,50). Daarna ~2u45 naar huis. |
 
@@ -48,9 +48,10 @@ nul-geïndexeerd is: `new Date(2026, 8, 11)` is 11 september 2026.
 
 - **Onderweg op zaterdag is er niets.** Geen kraan, geen café, geen winkel. Twee liter water
   per persoon en de lunch mee.
-- **Vuur is verboden** op de trekkingplaats, ook gasbranders. Boetes lopen op tot €25.000.
-  Er is een tegenstrijdigheid tussen de plaatsbeschrijving en de netwerkregels: navragen via
-  info@moselregion.com.
+- **Koken mag op de trekkingplaats.** De pagina van de Ortsgemeinde Bengel noemt zitplaatsen en
+  een vuurplaats waarop je "nach Herzenslust" kan koken of grillen, en een wandelverslag bevestigt
+  dat een campingbrander er toegestaan was. De algemene FAQ van het netwerk zegt wél "kein offenes
+  Feuer", dus de tegenstrijdigheid staat er nog. Navragen: (0160) 2422391.
 - **Check de omleiding.** De officiële GPX van de Grafschaft-Pfad heet momenteel
   `umleitung-grafschaft-pfad.gpx`. Actuele status op
   [gesundland-vulkaneifel.de/info/wege-info](https://www.gesundland-vulkaneifel.de/info/wege-info/).
