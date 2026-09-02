@@ -42,7 +42,35 @@ nul-geïndexeerd is: `new Date(2026, 8, 11)` is 11 september 2026.
 |---|---|
 | **Vrijdag 11/9** | Aarschot naar Bengel, ~2u30. Trekkingplatz "Unter den Obstbäumen" bij de oude Öl- und Kornmühle Springiersbach, €15, inchecken vanaf 14:00. Wandelen: Rundweg Nr. 1 (Rot), 6,1 km, vanaf de kloosterparking op ~1,5 km van de tent. |
 | **Zaterdag 12/9** | 07:30 opbreken. 08:30 start aan het Kurhaus, Grafenstraße 23, Manderscheid. Grafschaft-Pfad plus Manderscheider Burgenstieg, samen ~20 km en ~580 hm. 16:00 inchecken op Kyllblick 12. 19:00 Trattoria Vulcano, Grafenstraße 18. |
-| **Zondag 13/9** | Uitchecken tussen 10:00 en 10:30. Dan de Dauner Maare (8,6 km) of de Vulkaneifel-Therme in Bad Bertrich (€16,50). Daarna ~2u45 naar huis. |
+| **Zondag 13/9** | Uitchecken tussen 10:00 en 10:30. Dan de Dauner Maare (8,6 km) of de Vulkaneifel-Therme in Bad Bertrich. Daarna ~2u45 naar huis. |
+
+### Vrijdag, de opties
+
+- **Prinzenkopfturm** bij Pünderich: uitkijktoren over de Zeller Hamm, de langste meander van de
+  Moezel. Gratis en dag en nacht toegankelijk, 700 m en ~10 min omhoog vanaf de parking onder de
+  Marienburg. 4,9/5 uit 1.551 beoordelingen op komoot. Rijden vanaf Bengel: geschat 20-25 min.
+- **Bullayer Herbstfest**, do 10 t/m ma 14 september, aan de voet van de Prinzenkopf. Op
+  zaterdagavond regelt de brandweer het verkeer vanwege het vuurwerk, dus reken vrijdag en
+  zaterdag op drukte en parkeerdruk daar. Ook: Fröhlicher Weinmarkt in Traben-Trarbach, 11-13 sep.
+- **Vulkaneifel-Therme Bad Bertrich**, Clara-Viebig-Straße 3-7, +49 2674 913070. **Dagelijks
+  09:00-22:00.** Dagticket €16,50, twee uur €12. Kaartverkoop stopt een uur voor sluiting.
+  Eventueel met het rondje **Elfengrotte** ervoor: 2,4 km, 45 min, start bij de Tourist Info,
+  Kurfürstenstraße 32.
+- **Te voet vanaf de tent:** Rundweg Nr. 1 (Rot), 6,1 km, 151 hm, 1u45, rode pijlen, vanaf de
+  parking bij Klosterkirche Springiersbach. Let op: die lus heeft nul beoordelingen online, dus
+  neem de GPX mee.
+
+### Eten en winkels
+
+| Waar | Wanneer |
+|---|---|
+| Kaiser Döner 89, Trierer Str. 5, Bengel · 06532 954 60 39 | vrijdag 12:00-21:30 |
+| Alte Dorfschänke, Dorfstraße 14, Kinderbeuern · 06532 95480 | vrijdag 12:00-14:00 en 16:00-22:00, **keuken tot 20:00**, reserveren |
+| La Terrazza, Lindenplatz 1, Zell · +49 6542 963319 | dagelijks 11:00-23:00 |
+| Fachmarkt Becker, Trierer Str. 34, Bengel | ma-vr 06:00-18:30, za-zo 07:00-14:00, met Imbiss |
+| Netto, Im Hageflur 8, Bausendorf | vrijdag 07:00-20:00 |
+| Alftalbäckerei Gaulke, Hauptstraße 25, Kinderbeuern | **zaterdag 06:00-11:00** — het ontbijt |
+| Klosterladen Springiersbach | ma-vr 09:00-11:30 en 14:00-17:00, geen café |
 
 ### Aandachtspunten
 
