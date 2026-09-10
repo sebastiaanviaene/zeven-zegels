@@ -181,6 +181,8 @@ h1 span { color: var(--coral); display: inline-block; transform: rotate(2deg); }
 
 .pin:hover { background: var(--sun); }
 .pin.far { opacity: 0.42; }
+.pin.bag { background: var(--sun); font-size: 1.25rem; }
+.pin.bag:hover { background: var(--coral); }
 .pin.next { background: var(--sun); box-shadow: 0 0 0 4px var(--sun), 2px 3px 0 var(--ink); }
 .pin:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 .pin.done { background: var(--coral); color: var(--paper); }
@@ -250,6 +252,13 @@ dialog.note::backdrop { background: rgba(44, 42, 38, 0.55); }
 
 .note p { margin: 0.85rem 0 0; }
 .note p:first-of-type { margin-top: 0.9rem; }
+
+.note h3 {
+  font-family: var(--hand);
+  font-size: 1.05rem;
+  color: var(--teal);
+  margin: 1.15rem 0 0;
+}
 
 .note strong { font-weight: 800; }
 
@@ -1168,7 +1177,7 @@ footer {
     <p class="tiny" id="adminMsg">vrijdag 11 september &middot; 00:00</p>
   </div>
 
-  <p class="hint">Sleep de kaart, knijp om te zoomen. Tik op een slotje.</p>
+  <p class="hint">Sleep de kaart, knijp om te zoomen. Tik op een slotje, of op de rugzak.</p>
 
   <div class="quicklist" id="quicklist"></div>
 
@@ -1549,6 +1558,71 @@ footer {
     });
     count.textContent = n + "/7 open";
   }
+
+  /* ---------- the packing list, never locked ---------- */
+
+  function packing() {
+    inner.innerHTML =
+      '<span class="stamp">geen slot &middot; gewoon handig</span>' +
+      "<h2>Wat mee moet</h2>" +
+      '<p>Eén nacht buiten, één grote wandeldag, en één avond waarop we ergens aan tafel gaan. ' +
+      'Daar komt dit uit.</p>' +
+
+      '<div class="aside"><b>Niet vergeten</b>Cash. Op een Duits dorpsfeest kan je vaak niet met ' +
+      'kaart betalen, en er is geen bankautomaat in de buurt.</div>' +
+
+      "<h3>Voor de nacht buiten</h3>" +
+      '<ul>' +
+      '<li>Slaapzak en matje. Het wordt een graad of negen, dus geen zomerzak</li>' +
+      '<li>Een warme laag om in te slapen</li>' +
+      '<li>Hoofdlamp. We zetten misschien in de schemer op</li>' +
+      '<li>Slippers voor het washok</li>' +
+      '</ul>' +
+
+      "<h3>Voor de wandeldag</h3>" +
+      '<ul>' +
+      '<li>Wandelschoenen die al ingelopen zijn</li>' +
+      '<li>Twee flessen van een liter. Onderweg is er geen kraan en geen café</li>' +
+      '<li>Regenjas en een extra laag. Ochtend is twaalf graden, middag twintig</li>' +
+      '<li>Pleisters of tape voor blaren</li>' +
+      '<li>Powerbank. De kaart en de GPS trekken je batterij leeg</li>' +
+      '</ul>' +
+
+      "<h3>Voor de avond en de tweede nacht</h3>" +
+      '<ul>' +
+      '<li>Iets waarin je je graag laat zien</li>' +
+      '<li>Zwemkleding en een handdoek, voor het geval we zondag het water in gaan</li>' +
+      '</ul>' +
+
+      "<h3>Klein en vaak vergeten</h3>" +
+      '<ul>' +
+      '<li>Zonnebril en zonnecrème</li>' +
+      '<li>Laders, en een autolader</li>' +
+      '<li>Identiteitskaart</li>' +
+      '</ul>' +
+
+      '<p class="kiss">Al het eten en drinken regelen we onderweg.</p>' +
+      '<button class="close" type="button">terug naar de kaart</button>';
+
+    inner.querySelector(".close").addEventListener("click", function () { note.close(); });
+    if (!note.open) note.showModal();
+  }
+
+  var bag = document.createElement("button");
+  bag.className = "pin bag";
+  bag.type = "button";
+  bag.style.left = "30%";
+  bag.style.top = "14%";
+  bag.innerHTML = '<span>&#127890;</span><span class="pin-label">inpakken</span>';
+  bag.setAttribute("aria-label", "Wat mee moet");
+  bag.addEventListener("click", function () { if (!dragged) packing(); });
+  world.appendChild(bag);
+
+  var bagChip = document.createElement("button");
+  bagChip.type = "button";
+  bagChip.innerHTML = '<span class="qn">&#127890;</span><span>inpakken</span>';
+  bagChip.addEventListener("click", packing);
+  quicklist.appendChild(bagChip);
 
   function confetti() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;

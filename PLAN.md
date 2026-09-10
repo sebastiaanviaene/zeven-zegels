@@ -21,6 +21,14 @@ Adminkoode **`KOMPAS`**: omzeilt de aftelklok en de volgorde, zet in elk slot ee
 open", en laat de knop zien waarmee je dit plan opent. **"Alles opnieuw sluiten"** onderaan wist
 alles, inclusief de openingsanimatie, en zet de kaart terug naar wat Lisa als eerste ziet.
 
+### De rugzak
+
+Er staat een geel rugzakje op de kaart, links bovenaan, en een chip "inpakken" onder de kaart op
+een telefoon. Dat zit **niet** achter een slot en niet achter de volgorde: zodra de kaart open is
+kan ze de inpaklijst lezen. Bedoeld om vrijdagochtend al te kunnen beginnen.
+
+De lijst staat in `page.template.html` in de functie `packing()`.
+
 ### De opening
 
 Zolang het nog geen vrijdag is ziet ze een aftelklok. Zodra die op nul staat, of als ze de kaart
