@@ -34,10 +34,9 @@ vallen. Dat gebeurt precies één keer.
 De vijf regels staan in `page.template.html` in de lijst `LINES`. Nu:
 
 1. Eenendertig.
-2. De tas staat in de auto.
-3. De tent is geboekt, de tafel is gereserveerd.
-4. En er ligt een kaart met zeven plekken die je nog niet kent.
-5. Vanaf hier weet je niks meer vooraf.
+2. De tent is geboekt, de tafel is gereserveerd.
+3. En er ligt een kaart met zeven plekken die je nog niet kent.
+4. Vanaf hier weet je niks meer vooraf.
 
 **Testen:** admin aan met `KOMPAS`, dan in de admin-dialoog op **"toon de opening"**. Dat zet het
 kaartje terug en speelt de hele ceremonie opnieuw, ook al is het nog geen vrijdag.
