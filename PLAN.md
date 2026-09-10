@@ -21,14 +21,26 @@ Adminkoode **`KOMPAS`**: omzeilt de aftelklok en de volgorde, zet in elk slot ee
 open", en laat de knop zien waarmee je dit plan opent. **"Alles opnieuw sluiten"** onderaan wist
 alles, inclusief de openingsanimatie, en zet de kaart terug naar wat Lisa als eerste ziet.
 
-Twee dingen die zij niet ziet tot ze er zijn:
+### De opening
 
-- **De opening.** De eerste keer dat de kaart opengaat komt de tekening in beeld en vallen de zeven
-  pinnen één voor één op hun plek. Dat gebeurt maar één keer.
-- **Het achtste zegel.** Zodra alle zeven open zijn en ze de laatste sluit, opent er een brief die
-  nooit op de kaart stond, met confetti. Daarna blijft er een kloppend hartje midden op de kaart
-  staan om hem opnieuw te lezen. **Die brieftekst staat in `page.template.html` in de functie
-  `letter()`. Herschrijf die in je eigen woorden voor je vertrekt.**
+Zolang het nog geen vrijdag is ziet ze een aftelklok. Zodra die op nul staat, of als ze de kaart
+voor het eerst na middernacht opent, verdwijnt de klok en staat er in plaats daarvan één knop:
+**Maak open**.
+
+Drukt ze daarop, dan komen er vijf regels één voor één in beeld, gevolgd door confetti, en daarna
+schuift het kaartje weg en verschijnt de kaart, met de zeven pinnen die één voor één op hun plek
+vallen. Dat gebeurt precies één keer.
+
+De vijf regels staan in `page.template.html` in de lijst `LINES`. Nu:
+
+1. Eenendertig.
+2. De tas staat in de auto.
+3. De tent is geboekt, de tafel is gereserveerd.
+4. En er ligt een kaart met zeven plekken die je nog niet kent.
+5. Vanaf hier weet je niks meer vooraf.
+
+**Testen:** admin aan met `KOMPAS`, dan in de admin-dialoog op **"toon de opening"**. Dat zet het
+kaartje terug en speelt de hele ceremonie opnieuw, ook al is het nog geen vrijdag.
 
 ## Weer
 

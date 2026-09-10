@@ -641,48 +641,70 @@ body.sealed .gate { max-width: 30rem; }
   to   { opacity: 1; transform: translate(-50%, -50%) scale(var(--inv, 1)); }
 }
 
-/* ---------------- the letter ---------------- */
+/* ---------------- the opening ceremony ---------------- */
 
-.heart {
-  position: absolute;
-  transform: translate(-50%, -50%) scale(var(--inv, 1));
-  width: 46px; height: 46px;
-  border-radius: 50%;
-  border: 3px solid var(--ink);
-  background: var(--coral);
+.bigbtn {
+  font-family: var(--hand);
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  font-weight: 700;
+  padding: 0.7rem 1.6rem;
   color: var(--paper);
-  font-size: 1.25rem;
-  line-height: 1;
+  background: var(--coral);
+  border: 3px solid var(--ink);
+  border-radius: 6px;
+  box-shadow: 4px 5px 0 var(--ink);
   cursor: pointer;
-  padding: 0;
-  box-shadow: 2px 3px 0 var(--ink);
-  animation: beat 2.4s ease-in-out infinite;
+  animation: nudge 2.6s ease-in-out infinite;
 }
 
-.heart:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+.bigbtn:active { transform: translate(3px, 4px); box-shadow: 1px 1px 0 var(--ink); }
+.bigbtn:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 
-@keyframes beat {
-  0%, 100% { box-shadow: 2px 3px 0 var(--ink), 0 0 0 0 rgba(255, 106, 87, 0.55); }
-  50% { box-shadow: 2px 3px 0 var(--ink), 0 0 0 12px rgba(255, 106, 87, 0); }
+@keyframes nudge {
+  0%, 92%, 100% { transform: none; }
+  95% { transform: rotate(-2deg) scale(1.03); }
+  98% { transform: rotate(2deg) scale(1.03); }
 }
 
-.letter { text-align: center; }
+.seq {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 9.5rem;
+  justify-content: center;
+}
 
-.letter h2 { font-size: clamp(1.7rem, 6vw, 2.4rem); }
-
-.letter p {
+.seq p {
   font-family: var(--hand);
-  font-size: 1.06rem;
-  line-height: 1.65;
-  max-width: 30ch;
-  margin: 0.8rem auto 0;
+  font-size: clamp(1.05rem, 4vw, 1.35rem);
+  line-height: 1.35;
+  margin: 0;
+  max-width: 26ch;
+  opacity: 0;
+  animation: linein 700ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
-.letter .sign {
-  font-family: var(--hand);
-  font-size: 1.3rem;
-  color: var(--coral);
-  margin-top: 1.2rem;
+.seq p.last { color: var(--coral); font-weight: 700; }
+
+@keyframes linein {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.gate.shaking .seal-blob { animation: crack 700ms ease-in-out; }
+
+@keyframes crack {
+  0% { transform: rotate(-7deg) scale(1); }
+  25% { transform: rotate(6deg) scale(1.12); }
+  50% { transform: rotate(-9deg) scale(1.15); }
+  75% { transform: rotate(5deg) scale(1.1); }
+  100% { transform: rotate(-7deg) scale(1); }
+}
+
+.gate.fading { animation: gateout 620ms ease forwards; }
+
+@keyframes gateout {
+  to { opacity: 0; transform: scale(0.97); }
 }
 
 .confetti {
@@ -921,9 +943,12 @@ footer {
 // seal the page before first paint, so nothing flashes into view
 (function () {
   var opensAt = new Date(2026, 8, 11, 0, 0, 0);
-  var isAdmin = false;
-  try { isAdmin = localStorage.getItem("zevenzegels.admin.v1") === "1"; } catch (e) {}
-  if (Date.now() < opensAt && !isAdmin) {
+  var isAdmin = false, seen = false;
+  try {
+    isAdmin = localStorage.getItem("zevenzegels.admin.v1") === "1";
+    seen = localStorage.getItem("zevenzegels.intro.v1") === "1";
+  } catch (e) {}
+  if (!isAdmin && !seen) {
     document.documentElement.classList.add("presealed");
     document.addEventListener("DOMContentLoaded", function () {
       document.body.classList.add("sealed");
@@ -1149,6 +1174,8 @@ footer {
     <h2>Lisa, deze kaart gaat pas op vrijdag open.</h2>
     <p class="why">Eenendertig is een mooie leeftijd om iets niet te weten.</p>
     <div class="clock" id="clock"></div>
+    <button class="bigbtn" id="openBtn" type="button" hidden>Maak open</button>
+    <div class="seq" id="seq" hidden></div>
     <form id="adminForm">
       <input type="text" autocomplete="off" autocapitalize="characters" spellcheck="false"
              placeholder="code" aria-label="Code om vroeger te openen">
@@ -1188,11 +1215,12 @@ footer {
 <tr><td>7</td><td>zondag</td><td>zondagochtend</td><td><code>DRONKE</code></td></tr>
 </tbody></table></div>
 <p>Adminkoode <strong><code>KOMPAS</code></strong>: omzeilt de aftelklok en de volgorde, zet in elk slot een knopje "forceer open", en laat de knop zien waarmee je dit plan opent. <strong>"Alles opnieuw sluiten"</strong> onderaan wist alles, inclusief de openingsanimatie, en zet de kaart terug naar wat Lisa als eerste ziet.</p>
-<p>Twee dingen die zij niet ziet tot ze er zijn:</p>
-<ul>
-<li><strong>De opening.</strong> De eerste keer dat de kaart opengaat komt de tekening in beeld en vallen de zeven pinnen één voor één op hun plek. Dat gebeurt maar één keer.</li>
-<li><strong>Het achtste zegel.</strong> Zodra alle zeven open zijn en ze de laatste sluit, opent er een brief die nooit op de kaart stond, met confetti. Daarna blijft er een kloppend hartje midden op de kaart staan om hem opnieuw te lezen. <strong>Die brieftekst staat in <code>page.template.html</code> in de functie <code>letter()</code>. Herschrijf die in je eigen woorden voor je vertrekt.</strong></li>
-</ul>
+<h3>De opening</h3>
+<p>Zolang het nog geen vrijdag is ziet ze een aftelklok. Zodra die op nul staat, of als ze de kaart voor het eerst na middernacht opent, verdwijnt de klok en staat er in plaats daarvan één knop: <strong>Maak open</strong>.</p>
+<p>Drukt ze daarop, dan komen er vijf regels één voor één in beeld, gevolgd door confetti, en daarna schuift het kaartje weg en verschijnt de kaart, met de zeven pinnen die één voor één op hun plek vallen. Dat gebeurt precies één keer.</p>
+<p>De vijf regels staan in <code>page.template.html</code> in de lijst <code>LINES</code>. Nu:</p>
+<p>1. Eenendertig. 2. De tas staat in de auto. 3. De tent is geboekt, de tafel is gereserveerd. 4. En er ligt een kaart met zeven plekken die je nog niet kent. 5. Vanaf hier weet je niks meer vooraf.</p>
+<p><strong>Testen:</strong> admin aan met <code>KOMPAS</code>, dan in de admin-dialoog op <strong>"toon de opening"</strong>. Dat zet het kaartje terug en speelt de hele ceremonie opnieuw, ook al is het nog geen vrijdag.</p>
 <h2>Weer</h2>
 <p>Beide dagen <strong>droog</strong>, 0 mm en 0% kans.</p>
 <div class="tablewrap"><table>
@@ -1691,21 +1719,7 @@ footer {
       s.chip.querySelector(".qn").textContent = done ? s.n : "🔒";
     });
     count.textContent = n + "/7 open";
-    heart.hidden = n < SEALS.length;
   }
-
-  /* ---------- the letter, only once all seven are open ---------- */
-
-  var heart = document.createElement("button");
-  heart.className = "heart";
-  heart.type = "button";
-  heart.hidden = true;
-  heart.style.left = "50%";
-  heart.style.top = "60%";
-  heart.innerHTML = "&#10084;";
-  heart.setAttribute("aria-label", "Lees de brief");
-  heart.addEventListener("click", function () { if (!dragged) letter(); });
-  world.appendChild(heart);
 
   function confetti() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -1724,27 +1738,6 @@ footer {
     setTimeout(function () { box.remove(); }, 6000);
   }
 
-  function letter(withConfetti) {
-    inner.innerHTML =
-      '<div class="letter">' +
-      '<span class="stamp">het achtste zegel</span>' +
-      '<h2>Lisa</h2>' +
-      '<p>Zeven plekken, en geen enkele ervan was het punt.</p>' +
-      '<p>Het punt was dat ik een weekend wilde maken waarin je nergens aan moest denken. ' +
-      'Waarin alles al geregeld was en je alleen maar hoefde te kijken wat er kwam.</p>' +
-      '<p>Je bent eenendertig, en ik ken niemand die zo goed is in mee gaan met een idee ' +
-      'waarvan ze de helft nog niet weet. Daarom werkte dit.</p>' +
-      '<p>Dank je voor dit weekend, en voor alle andere.</p>' +
-      '<p class="sign">Ik hou van je.</p>' +
-      '</div>' +
-      '<button class="close" type="button">terug naar de kaart</button>';
-    inner.querySelector(".close").addEventListener("click", function () { note.close(); });
-    if (!note.open) note.showModal();
-    inner.classList.remove("pop");
-    void inner.offsetWidth;
-    inner.classList.add("pop");
-    if (withConfetti) confetti();
-  }
 
   function show(i) {
     var s = SEALS[i];
@@ -1781,14 +1774,6 @@ footer {
         inner.classList.remove("pop");
         void inner.offsetWidth;
         inner.classList.add("pop");
-
-        // the last seal earns a letter that was never on the map
-        if (nextIndex() === -1) {
-          note.addEventListener("close", function once() {
-            note.removeEventListener("close", once);
-            setTimeout(function () { letter(true); }, 280);
-          });
-        }
       }
 
       var forceBtn = inner.querySelector(".forceer");
@@ -1891,9 +1876,75 @@ footer {
     }, 500 + SEALS.length * 180 + 700);
   }
 
+  /* ---------- the moment before the map ---------- */
+
+  var openBtn = document.getElementById("openBtn");
+  var seq = document.getElementById("seq");
+
+  var LINES = [
+    "Eenendertig.",
+    "De tas staat in de auto.",
+    "De tent is geboekt, de tafel is gereserveerd.",
+    "En er ligt een kaart met zeven plekken die je nog niet kent.",
+    "Vanaf hier weet je niks meer vooraf."
+  ];
+
+  function armCeremony() {
+    if (ticker) { clearInterval(ticker); ticker = null; }
+    clock.hidden = true;
+    adminForm.hidden = true;
+    adminMsg.hidden = true;
+    openBtn.hidden = false;
+    gate.querySelector("h2").textContent = "Lisa, de kaart is open.";
+    gate.querySelector(".why").textContent = "Eén druk en je weet waar we heen gaan.";
+  }
+
+  function runCeremony() {
+    openBtn.hidden = true;
+    gate.classList.add("shaking");
+    gate.querySelector("h2").hidden = true;
+    gate.querySelector(".why").hidden = true;
+    seq.hidden = false;
+
+    LINES.forEach(function (text, i) {
+      setTimeout(function () {
+        var p = document.createElement("p");
+        if (i === LINES.length - 1) p.className = "last";
+        p.textContent = text;
+        seq.appendChild(p);
+        // keep only the last two lines on screen so the card never grows out of view
+        while (seq.children.length > 2) seq.removeChild(seq.firstChild);
+      }, i * 1500);
+    });
+
+    var end = LINES.length * 1500;
+    setTimeout(confetti, end + 200);
+    setTimeout(function () { gate.classList.add("fading"); }, end + 900);
+    setTimeout(function () { gate.classList.remove("fading"); lift(); }, end + 1500);
+  }
+
+  openBtn.addEventListener("click", runCeremony);
+
+  // admin only: put the sealed card back so the opening can be watched again
+  function replayOpening() {
+    try { localStorage.removeItem(INTRO_KEY); } catch (e) {}
+    seq.innerHTML = "";
+    seq.hidden = true;
+    gate.classList.remove("shaking", "fading");
+    gate.querySelector("h2").hidden = false;
+    gate.querySelector(".why").hidden = false;
+    document.body.classList.add("sealed");
+    gate.hidden = false;
+    viewport.hidden = true;
+    quicklist.hidden = true;
+    hint.hidden = true;
+    armCeremony();
+    window.scrollTo(0, 0);
+  }
+
   function tick() {
     var left = OPENS_AT - Date.now();
-    if (left <= 0) { lift(); return; }
+    if (left <= 0) { armCeremony(); return; }
     var s = Math.floor(left / 1000);
     var d = Math.floor(s / 86400);
     var h = Math.floor((s % 86400) / 3600);
@@ -1920,8 +1971,18 @@ footer {
 
   planBtn.hidden = !admin;
 
-  if (Date.now() >= OPENS_AT || admin) {
+  var seenOpening = false;
+  try { seenOpening = localStorage.getItem(INTRO_KEY) === "1"; } catch (e) {}
+
+  if (admin || seenOpening) {
     lift();
+  } else if (Date.now() >= OPENS_AT) {
+    document.body.classList.add("sealed");
+    gate.hidden = false;
+    viewport.hidden = true;
+    quicklist.hidden = true;
+    hint.hidden = true;
+    armCeremony();
   } else {
     document.body.classList.add("sealed");
     gate.hidden = false;
@@ -1938,7 +1999,12 @@ footer {
         '<span class="stamp">admin</span><h2>Admin staat aan.</h2>' +
         '<p class="notyet">Je kan elk zegel in willekeurige volgorde openen, en er staat een ' +
         '"forceer open" knop in elk slot.</p>' +
+        '<div><button class="forceer" id="testOpening" type="button">toon de opening</button></div>' +
         '<button class="close" type="button">sluiten</button>';
+      inner.querySelector("#testOpening").addEventListener("click", function () {
+        note.close();
+        replayOpening();
+      });
     } else {
       inner.innerHTML =
         '<span class="stamp">admin</span><h2>Admin</h2>' +
